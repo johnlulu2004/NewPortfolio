@@ -12,76 +12,83 @@ const navItems = [
 export const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 10);
     window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   return (
     <nav
       className={cn(
         "fixed w-full z-40 transition-all duration-300",
         isScrolled
-          ? "py-3 bg-background/80 backdrop-blur-md shadow-xsm"
-          : "py-5 " //bg-transparent
+          ? "py-3 bg-background/80 backdrop-blur-md shadow-sm border-b border-border/50"
+          : "py-5"
       )}
     >
       <div className="container flex items-center justify-between">
-        <a
-          className="text-xl font-bold text-primary flex items-center"
-          href="#hero"
-        >
-          <span className="relative z-10 ">
-            <span className="text-glow text-foreground">John's </span> Portfolio
-          </span>
+        {/* Logo */}
+        <a href="#hero" className="text-lg font-bold flex items-center gap-1">
+          <span className="text-foreground">John</span>
+          <span className="text-primary">Lu</span>
+          <span className="ml-1 w-1.5 h-1.5 rounded-full bg-primary inline-block animate-pulse" />
         </a>
 
-        {/* Desktop Menu */}
-        <div className="py-1.5 hidden md:flex space-x-8">
-          {navItems.map((item, key) => (
+        {/* Desktop links */}
+        <div className="hidden md:flex items-center gap-1">
+          {navItems.map((item) => (
             <a
-              key={key}
+              key={item.name}
               href={item.href}
-              className="text-foreground/80 transition-colors duration-300 hover-primary"
+              className="px-4 py-2 text-sm text-foreground/70 hover:text-foreground rounded-lg hover:bg-secondary transition-colors duration-200"
             >
               {item.name}
             </a>
           ))}
+          <a href="#contact" className="ml-4 cosmic-button text-sm py-2 px-5">
+            Hire Me
+          </a>
         </div>
 
-        {/* Mobile Menu */}
-
+        {/* Mobile toggle */}
         <button
-          className="md:hidden p-2 text-foreground z-50"
+          className="md:hidden p-2 text-foreground z-50 rounded-lg hover:bg-secondary transition-colors"
           onClick={() => setIsMenuOpen((prev) => !prev)}
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
         >
-          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}{" "}
+          {isMenuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
+
+        {/* Mobile overlay */}
         <div
           className={cn(
-            "fixed inset-0 bg-background/95 backdroup-blur-md z-40 flex flex-col items-center justify-center",
-            "transition-all duration-300 md:hidden",
+            "fixed inset-0 bg-background/97 backdrop-blur-md z-40 flex flex-col items-center justify-center md:hidden",
+            "transition-all duration-300",
             isMenuOpen
               ? "opacity-100 pointer-events-auto"
               : "opacity-0 pointer-events-none"
           )}
         >
-          <div className="flex flex-col items-center space-y-8 text-xl">
-            {navItems.map((item, key) => (
+          <div className="flex flex-col items-center gap-8 text-xl">
+            {navItems.map((item) => (
               <a
-                key={key}
+                key={item.name}
                 href={item.href}
-                className="text-foreground/80 transition-colors duration-300 hover-primary"
+                className="font-medium text-foreground/80 hover:text-primary transition-colors"
                 onClick={() => setIsMenuOpen(false)}
               >
                 {item.name}
               </a>
             ))}
+            <a
+              href="#contact"
+              className="cosmic-button mt-2"
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Hire Me
+            </a>
           </div>
         </div>
       </div>
